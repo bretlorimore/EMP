@@ -110,8 +110,8 @@ class ImageDataSimpleSplit(ImageDataBase):
         shuffle(keys)
 
         # Choose training/test examples
-        self.train_keys = keys[:num_train]
-        self.test_keys = keys[num_train:]
+        self.train_keys = keys[:32]
+        self.test_keys = keys[32:64]
 
     def get_train(self):
         return self.get_dataset(self.train_keys)

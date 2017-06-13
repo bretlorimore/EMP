@@ -1,9 +1,11 @@
 import argparse
 import json
 
+import cv2
 import numpy as np
 from keras import backend as K
 
+from inspector import Inspector
 from image_data import ImageDataKFold
 from image_data import ImageDataNP
 from logistic_reg import train_and_evaluate as train_and_eval_lr
@@ -32,6 +34,8 @@ def main():
     out = vgg.get_layer(name='fc2').output
     functor = K.function([inp], [out])
 
+    detective = Inspector(vgg)
+
     vgg_relu_out = list()
     batch_size=32
     start, end = 0, 0
@@ -40,8 +44,10 @@ def main():
         end = min((i + 1) * batch_size, x_train.shape[0])
         print('Batch {}, images[{}:{}]'.format(i, start, end))
 
-        vecs = functor([x_train[start:end]])
-        vgg_relu_out.extend(vecs[0])
+        #vecs = functor([x_train[start:end]])
+        #vgg_relu_out.extend(vecs[0])
+
+        detective.visualize(x_train[start:end])
 
         # Update start index
         start = end

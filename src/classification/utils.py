@@ -21,7 +21,7 @@ def download_images(img_dir, img_uris):
         subprocess.run(['gsutil', '-m', 'cp', '-I', img_dir], stdin=f)
 
 
-def get_vgg(name, include_top=True, weights=None, classes=2):
+def get_vgg(name, include_top=True, weights=None, classes=2, input_tensor=None):
     """
     Returns VGG16/19 model, (depending on cls parameter)
     """
@@ -30,7 +30,8 @@ def get_vgg(name, include_top=True, weights=None, classes=2):
     elif name == 'VGG19':
         cls = VGG19
 
-    model = cls(include_top=include_top, input_shape=(224, 224, 3), weights=weights, classes=classes)
+    model = cls(include_top=include_top, input_shape=(224, 224, 3),
+                weights=weights, classes=classes, input_tensor=input_tensor)
     model.compile(loss='mse', optimizer='rmsprop')
 
     return model
